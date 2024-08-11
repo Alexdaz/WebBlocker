@@ -20,12 +20,12 @@ namespace WEB_BLOCKER
         public static extern bool ReleaseCapture();
         #endregion
 
-        private const string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
-        private const string hostsPath = @"C:\WINDOWS\system32\drivers\etc\hosts";
+        private const string PATTERN = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+        private const string HOSTPATH = @"C:\WINDOWS\system32\drivers\etc\hosts";
 
-        private string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        private readonly string AppName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
-        private string[] prefixes = new string[5]
+        private readonly string[] prefixes = new string[5]
         {
             "http://www.", "https://www.", "http://", "https://", "www."
         };
@@ -37,7 +37,7 @@ namespace WEB_BLOCKER
 
         private bool IsValidURL(string URL)
         {
-            var Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var Rgx = new Regex(PATTERN, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             return Rgx.IsMatch(URL);
         }
 
@@ -46,9 +46,9 @@ namespace WEB_BLOCKER
             MessageBox.Show("Si esta es la primera vez que utiliza el programa haga una copia de seguridad para una recuperación, si se presenta el caso.",
                 AppName, MessageBoxButtons.OK);
 
-            if (File.Exists(hostsPath))
+            if (File.Exists(HOSTPATH))
             {
-                using (var reader = new StreamReader(hostsPath))
+                using (var reader = new StreamReader(HOSTPATH))
                 {
                     var hostfile = reader.ReadToEnd();
                     tbHosts.Text = hostfile;
@@ -60,7 +60,7 @@ namespace WEB_BLOCKER
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            using (var writer = new StreamWriter(hostsPath))
+            using (var writer = new StreamWriter(HOSTPATH))
             {
                 writer.WriteLine(tbHosts.Text);
                 writer.Close();
@@ -110,12 +110,12 @@ namespace WEB_BLOCKER
 
             var site = prefixes.Where(dom => tbPage.Text.StartsWith(dom)).Any() ? tbPage.Text.Replace(prefixes.Where(st => tbPage.Text.StartsWith(st)).FirstOrDefault(), string.Empty) : tbPage.Text;
 
-            using (var writer = new StreamWriter(hostsPath))
+            using (var writer = new StreamWriter(HOSTPATH))
             {
                 writer.WriteLine(tbHosts.Text + $"\n127.0.0.1       {site}\n127.0.0.1       www.{site}");
                 writer.Close();
 
-                using (var refresh = new StreamReader(hostsPath))
+                using (var refresh = new StreamReader(HOSTPATH))
                 {
                     tbHosts.Text = refresh.ReadToEnd();
                     refresh.Close();

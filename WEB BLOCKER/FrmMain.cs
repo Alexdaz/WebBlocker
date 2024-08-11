@@ -38,6 +38,7 @@ namespace WEB_BLOCKER
         private bool IsValidURL(string URL)
         {
             var Rgx = new Regex(PATTERN, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
             return Rgx.IsMatch(URL);
         }
 
@@ -89,8 +90,7 @@ namespace WEB_BLOCKER
 
         private void btnHelp_Click(object sender, EventArgs e)
         {
-            var help = new FrmHelp();
-            help.Show();
+            new FrmHelp().Show();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

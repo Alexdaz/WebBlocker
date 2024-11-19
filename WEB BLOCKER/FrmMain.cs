@@ -125,7 +125,7 @@ namespace WEB_BLOCKER
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
 
         private void pnlTitle_MouseMove(object sender, MouseEventArgs e)
